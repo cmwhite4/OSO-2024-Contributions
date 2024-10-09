@@ -2,33 +2,21 @@ RMarkdownTest
 ================
 2024-10-09
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
-
 ``` r
-summary(cars)
+## Testing out working code 
+vec <- seq(1:100) # Sequence 1 to 100
+mean(vec) # Get the mean
 ```
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
+    ## [1] 50.5
 
-## Including Plots
+``` r
+rev(vec) # Print in reverse 
+```
 
-You can also embed plots, for example:
-
-![](RMarkdownTest_files/figure-gfm/pressure-1.png)<!-- -->
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+    ##   [1] 100  99  98  97  96  95  94  93  92  91  90  89  88  87  86  85  84  83
+    ##  [19]  82  81  80  79  78  77  76  75  74  73  72  71  70  69  68  67  66  65
+    ##  [37]  64  63  62  61  60  59  58  57  56  55  54  53  52  51  50  49  48  47
+    ##  [55]  46  45  44  43  42  41  40  39  38  37  36  35  34  33  32  31  30  29
+    ##  [73]  28  27  26  25  24  23  22  21  20  19  18  17  16  15  14  13  12  11
+    ##  [91]  10   9   8   7   6   5   4   3   2   1
