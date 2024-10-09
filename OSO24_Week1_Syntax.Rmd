@@ -6,7 +6,7 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 ```
 
 ## Data
@@ -15,3 +15,30 @@ Dataset: <https://ldbase.org/datasets/28729a95-d898-4271-b16e-dc67be8d8689>
 **Citation**: Hart, S. A., Ganley, C., & Purpura, D. (2021). Final Cleaned Data from Home Math Environment Project. <http://ldbase.org/datasets/28729a95-d898-4271-b16e-dc67be8d8689>
 
 **Data Viz Inspiration**: Saffo, D., South, L., & Worth, A. (2020, December 3). CS7295 Project 2. Retrieved from <https://osf.io/2v6jq>
+
+## Libraries
+```{r}
+library(here) # here()
+library(tidyverse) # tidy
+library(ggplot2) # ggplot()
+library(showtext) # font_add_google(), showtext_auto()
+library(stringr) # str_wrap()
+library(ggpubr) # ggarrange()
+library(grid) # grobTree()
+```
+
+## Data Cleaning
+```{r}
+# Read in data 
+dat0 <- read.csv(here("OSO-Week1-Data/FinalCleanedData.csv"),
+                 na.strings = ".") # Convert . to NA for missing data
+
+# Clean one data entry error in math variable
+clean_dat <- dat0 |> select(id, matheveryday, 
+                          readtoeveryday) |> 
+  mutate(matheveryday = case_when(matheveryday == 0 ~ 1,
+                         TRUE ~ matheveryday))
+```
+
+## Plot 1: Proportion Plot
+
