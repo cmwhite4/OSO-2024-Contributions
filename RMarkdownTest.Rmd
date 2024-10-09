@@ -1,6 +1,6 @@
 ---
 title: "RMarkdownTest"
-output: html_document
+output: github_document
 date: "2024-10-09"
 ---
 
