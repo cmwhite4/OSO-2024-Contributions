@@ -14,3 +14,90 @@ Cleaned Data from Home Math Environment Project.
 
 **Data Viz Inspiration**: Saffo, D., South, L., & Worth, A. (2020,
 December 3). CS7295 Project 2. Retrieved from <https://osf.io/2v6jq>
+
+## Libraries
+
+``` r
+library(here) # here()
+library(tidyverse) # tidy
+library(ggplot2) # ggplot()
+library(showtext) # font_add_google(), showtext_auto()
+library(stringr) # str_wrap()
+library(ggpubr) # ggarrange()
+library(grid) # grobTree()
+```
+
+## Data Cleaning
+
+``` r
+# Read in data 
+dat0 <- read.csv(here("OSO-Week1-Data/FinalCleanedData.csv"),
+                 na.strings = ".") # Convert . to NA for missing data
+
+# Clean one data entry error in math variable
+clean_dat <- dat0 |> select(id, matheveryday, 
+                          readtoeveryday) |> 
+  mutate(matheveryday = case_when(matheveryday == 0 ~ 1,
+                         TRUE ~ matheveryday))
+```
+
+## Plot 1: Proportion Plot
+
+``` r
+### Math -----------------------------------------------------------------------
+## Create and format summary data for plotting
+plot1a_dat <- clean_dat |> group_by(matheveryday) |>
+  rename(rating = matheveryday) |>
+  summarise(pct = n()/339) |> 
+  mutate(item = "math")
+
+## Create plot 
+plot1a <- ggplot(plot1a_dat, aes(x = "", y = pct)) + 
+  geom_col(aes(fill = fct_rev(factor(rating))), color = "white")  + 
+  coord_flip() + ggtitle("exposed to math") +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(legend.position = "top",
+        legend.box.spacing = unit(0, "pt"),
+        axis.text.y = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(), 
+        text = element_text(color = "#5f5547",
+                            family = "comf", size = 11),
+        plot.title = element_text(hjust = .5),
+        plot.background = element_rect(fill = "white"),
+        panel.background = element_rect(fill= "white"),
+        plot.margin = margin(c(0,0,-2,0),unit="cm"),
+        aspect.ratio = .1) + 
+  scale_fill_manual("", values = rev(c("#C1A089", "#d1884f", "#d1734f", "#ac5132", "#842d13"))) + 
+  scale_y_continuous(breaks = c(.05, .95),
+                     labels = c(str_wrap("Not important", 4), 
+                                str_wrap("Very important", 4)))
+
+### Reading --------------------------------------------------------------------
+## Create and format summary data for plotting
+### Reading
+plot1b_dat <- clean_dat |> group_by(readtoeveryday) |>
+  rename(rating = readtoeveryday) |>
+  summarise(pct = n()/339) |> 
+  mutate(item = "read")
+
+plot1b <- ggplot(plot1b_dat, aes(x = "", y = pct)) + 
+  geom_col(aes(fill = fct_rev(factor(rating))), color = "white")  + 
+  coord_flip() + ggtitle("read to") +
+guides(fill = guide_legend(reverse = TRUE)) +
+  theme(legend.position = "top",
+        legend.box.spacing = unit(0, "pt"),
+        axis.text.y = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        text = element_text(color = "#5f5547", family = "comf", size = 11), 
+        plot.title = element_text(hjust = .5),
+        plot.margin = margin(c(-2,0,0,0), unit = "cm"),
+        plot.background = element_rect(fill = "white"),
+        panel.background = element_rect(fill= "white"),
+        aspect.ratio = .1) + 
+  scale_fill_manual("", values = rev(c("#d1e1cb", "#afc6a7", "#8ba97f", "#6d8465", "#4f5e4a"))) + 
+  scale_y_continuous(breaks = c(.05, .95),
+                     labels = c(str_wrap("Not important", 4), 
+                                str_wrap("Very important", 4)))
+```
