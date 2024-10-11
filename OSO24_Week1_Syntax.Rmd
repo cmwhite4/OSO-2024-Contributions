@@ -30,7 +30,7 @@ library(grid) # grobTree()
 ## Data Cleaning
 ```{r}
 # Read in data 
-dat0 <- read.csv(here("OSO-Week1-Data/FinalCleanedData.csv"),
+dat0 <- read.csv(here("OSO-Data/FinalCleanedData.csv"),
                  na.strings = ".") # Convert . to NA for missing data
 
 # Clean one data entry error in math variable
