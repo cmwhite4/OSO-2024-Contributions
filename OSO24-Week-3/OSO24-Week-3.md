@@ -1,17 +1,20 @@
----
-title: "OSO24-Week-3"
-author: "Christine White"
-date: "2024-10-23"
-output: github_document
----
+OSO24-Week-3
+================
+Christine White
+2024-10-23
 
 ## Data
-**Dataset**: <https://ldbase.org/datasets/7e729b59-761d-4332-a468-d7b86e0ceaa8>
 
-**Citation**: Geary, D. C., Scofield, J. E., & Hoard, M. K. (2023). Sex Differences in Mathematics Anxiety and Attitudes. https://doi.org/10.1037/edu0000355
+**Dataset**:
+<https://ldbase.org/datasets/7e729b59-761d-4332-a468-d7b86e0ceaa8>
+
+**Citation**: Geary, D. C., Scofield, J. E., & Hoard, M. K. (2023). Sex
+Differences in Mathematics Anxiety and Attitudes.
+<https://doi.org/10.1037/edu0000355>
 
 ## Libraries
-```{r, message=FALSE}
+
+``` r
 library(here) # here()
 library(tidyverse)
 library(showtext) # font_add_google(), showtext_auto()
@@ -21,7 +24,8 @@ library(cowplot)
 ```
 
 ## Data Import & Prep
-```{r}
+
+``` r
 dat7th <- read.table(here("OSO-Data/MathAnxSeventh.csv")) # Read in data file for 7th grade
 
 colnames(dat7th) <- c("ID", "Sex", "MathStan_6s", # Rename columns based on codebook
@@ -34,8 +38,9 @@ plotdf <- dat7th |> select(ID, contains("MAnxLearn")) |>
   pivot_longer(MAnxLearn_6:MAnxLearn_7, names_to = "Grade", values_to = "Score")
 ```
 
-## Plot 
-```{r, warning = F}
+## Plot
+
+``` r
 # Import font from Google Fonts
 font_add_google("Amarante", "ama")
 
@@ -73,3 +78,5 @@ plot2 <- ggarrange(plot, welltext,
 plot2 + draw_image(spider, width = .4, height = .4,
                    y = .6, x = .6)
 ```
+
+![](OSO24-Week-3_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
