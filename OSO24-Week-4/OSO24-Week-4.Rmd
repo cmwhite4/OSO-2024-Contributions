@@ -8,28 +8,56 @@ output: github_document
 ## Dataset
 Ceviren, A. B., & Logan, J. A. (2023). Data Sharing Beliefs and Attitudes Data. http://ldbase.org/datasets/14d882ca-85d8-44dd-821d-b39121e3fb53
 
-## Data Import
+## Setup
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+## Libraries
+```{r, message=F}
+library(tidyverse)
+library(here)
+library(formattable)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+## Data Import
+```{r import}
+dat0 <- read.csv(here("OSO-Data/data_sharing_data.csv")) |>
+  select(-1) # Remove extra column "X"
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Data Preparation
+```{r prep}
+# Subset to relevant columns 
+dat1 <- dat0 |> select(ds.agreementfinal, contains("5d")) |>
+  drop_na() |>
+  group_by(ds.agreementfinal) |> 
+  summarise(`Benefits Science` = round(sum(ds.Q5d_1 > 3)/n(), 2),
+            `Good for Career` = round(sum(ds.Q5d_3 > 3)/n(), 2),
+            `More Citations` = round(sum(ds.Q5d_7 > 3)/n(), 2),
+            `IRB Concerns` = round(sum(ds.Q5d_2 > 3)/n(), 2),
+            `Participant Risk` = round(sum(ds.Q5d_5 > 3)/n(), 2),
+            `Data Scooping` = round(sum(ds.Q5d_6 > 3)/n(), 2),
+            `Time or Resources` = round(sum(ds.Q5d_11 > 3)/n(), 2)) |>
+  mutate(Group = dplyr::case_match(ds.agreementfinal, 
+                      1 ~ "Believer",
+                      0 ~ "Skeptic")) |>
+  select(-ds.agreementfinal) |>
+  select(Group, everything())
+
+```
+
+## Plot (Table)
+```{r table}
+library(formattable)
+formattable(dat1, 
+            caption = "What proportion of surveyed education researchers (n = 178) agreed to any extent with the following benefits of (green) and barriers to (blue) data sharing?",
+            align = c("l", rep("c", NCOL(dat1)-1)),
+            list(`Group` = formatter("span", style = ~ style(color = "grey", 
+                                                             font.weight = "bold")),
+                 area(col = 2:4) ~ color_tile("#e5ede0", "#a1c18e"),
+                 area(col = 5:8) ~ color_tile("#bad5e2", "#61a1c0")))
+```
+
+
